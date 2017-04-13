@@ -1,8 +1,10 @@
-export PRECOM="/Users/leslyb/development/go/src/github.com/lbrezilien/shakur"
-source $PRECOM/bash-preexec.sh
+#!/bin/bash
+source bashpreex.sh
+ 
+
 declare -a SCARYPHRASES=("git co master" "git co" "go run")
 preexec() { 
-  
+  echo "This is the trial at work"
   for PHRASE in "${SCARYPHRASES[@]}"
   do
     if [[ $1 == $PHRASE ]]
