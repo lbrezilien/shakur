@@ -1,8 +1,11 @@
 #!/bin/bash
-source bashpreex.sh
  
 
 declare -a SCARYPHRASES=("git co master" "git co" "go run")
+loadpreex(){
+  source bashpreex.sh
+
+}
 preexec() { 
   echo "This is the trial at work"
   for PHRASE in "${SCARYPHRASES[@]}"
