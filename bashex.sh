@@ -2,11 +2,8 @@
  
 
 declare -a SCARYPHRASES=("git co master" "git co" "go run")
-loadpreex(){
-  source bashpreex.sh
 
-}
-preexec() { 
+shakur-preexec() { 
   echo "This is the trial at work"
   for PHRASE in "${SCARYPHRASES[@]}"
   do
@@ -16,3 +13,8 @@ preexec() {
     fi
   done
  }
+
+ shakur-load(){
+  source bashpreex.sh
+  preexec_functions+=(shakur-preexec)
+}
