@@ -21,12 +21,12 @@ shakur-preexec() {
 
       if [[ "$ANSWER" == "N" ]]
       then
-        echo "Ok Shakur will be closing this terminal window, you can cancel this by pressing cmd+c"
-        echo "5.."
+        echo "Ok, Shakur will be closing this terminal window if 5 seconds, you can cancel this by pressing ^C (CTRL+C)"
+        echo "5....."
         sleep 1
-        echo "4.."
+        echo "4...."
         sleep 1
-        echo "3.."
+        echo "3..."
         sleep 1
         echo "2.."
         sleep 1
