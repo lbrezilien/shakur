@@ -1,10 +1,16 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"io/ioutil"
+	"log"
+
+	yaml "gopkg.in/yaml.v2"
+)
 
 const (
 	bashex = `
-declare -a SCARYPHRASES=("git co master" "git co" "go run" "gitum")
+declare -a SCARYPHRASES=(%v)
 
 shakur-preexec() {
   echo "You've entered a command that you asked shakur to watch!"
@@ -342,14 +348,38 @@ fi;
 `
 )
 
+type config struct {
+	Preventatives []string `yaml:"preventatives"`
+}
+
+func (c *config) getConfig() *config {
+
+	yamlFile, err := ioutil.ReadFile("shakur.config.yml")
+	if err != nil {
+		log.Printf("yamlFile.Get err   #%v ", err)
+	}
+	err = yaml.Unmarshal(yamlFile, c)
+	if err != nil {
+		log.Fatalf("Unmarshal: %v", err)
+	}
+
+	return c
+}
+
 func main() {
-	loadBashFiles()
+	var c config
+	c.getConfig()
+	initString := ``
+	for item := range c.Preventatives {
+		initString = initString + fmt.Sprintf(` "%v" `, c.Preventatives[item])
+	}
+	loadBashFiles(initString)
 
 }
 
-func loadBashFiles() {
+func loadBashFiles(opt string) {
 	fmt.Printf(`%s
                 %s &&
                 shakur-load
-                `, bashpreex, bashex)
+                `, bashpreex, fmt.Sprintf(bashex, opt))
 }
