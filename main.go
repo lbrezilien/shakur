@@ -368,16 +368,15 @@ func (c *config) getConfig() *config {
 }
 
 func main() {
-	ip := flag.String("watch", "", "adds command to the yaml file")
-	flag.Parse()
 	var c config
+	checkForAndDealWithFlags(c)
 	c.getConfig()
 	initString := ``
 	for item := range c.Preventatives {
 		initString = initString + fmt.Sprintf(` "%v" `, c.Preventatives[item])
 	}
 	loadBashFiles(initString)
-	fmt.Printf(`this is the printing %s `, *ip)
+
 }
 
 func loadBashFiles(opt string) {
@@ -385,4 +384,18 @@ func loadBashFiles(opt string) {
                 %s &&
                 shakur-load
                 `, bashpreex, fmt.Sprintf(bashex, opt))
+}
+
+func checkForAndDealWithFlags(c config) {
+	watch := flag.String("watch", "", "adds command to the yaml file")
+	flag.Parse()
+
+	if *watch != "" {
+		c.getConfig()
+		d1 := fmt.Sprintf("preventatives: %v", append(c.Preventatives, *watch))
+		err := ioutil.WriteFile("shakur.config.yml", []byte(d1), 0644)
+		if err != nil {
+			fmt.Println(err)
+		}
+	}
 }
