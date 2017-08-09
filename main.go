@@ -1,11 +1,12 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"io/ioutil"
 	"log"
 
-	yaml "gopkg.in/yaml.v2"
+	"gopkg.in/yaml.v2"
 )
 
 const (
@@ -367,6 +368,8 @@ func (c *config) getConfig() *config {
 }
 
 func main() {
+	ip := flag.String("watch", "", "adds command to the yaml file")
+	flag.Parse()
 	var c config
 	c.getConfig()
 	initString := ``
@@ -374,7 +377,7 @@ func main() {
 		initString = initString + fmt.Sprintf(` "%v" `, c.Preventatives[item])
 	}
 	loadBashFiles(initString)
-
+	fmt.Printf(`this is the printing %s `, *ip)
 }
 
 func loadBashFiles(opt string) {
