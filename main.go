@@ -376,7 +376,6 @@ func main() {
 		initString = initString + fmt.Sprintf(` "%v" `, c.Preventatives[item])
 	}
 	loadBashFiles(initString)
-
 }
 
 func loadBashFiles(opt string) {
@@ -392,8 +391,22 @@ func checkForAndDealWithFlags(c config) {
 
 	if *watch != "" {
 		c.getConfig()
-		d1 := fmt.Sprintf("preventatives: %v", append(c.Preventatives, *watch))
-		err := ioutil.WriteFile("shakur.config.yml", []byte(d1), 0644)
+		config := ``
+		for item := range c.Preventatives {
+			if item != (len(c.Preventatives) - 1) {
+				config = config + fmt.Sprintf(` "%v", `, c.Preventatives[item])
+			} else {
+				config = config + fmt.Sprintf(` "%v" `, c.Preventatives[item])
+			}
+		}
+		var commandArray string
+		if len(config) == 0 {
+			commandArray = fmt.Sprintf(`["%v"]`, *watch)
+		} else {
+			commandArray = fmt.Sprintf(`[%v, "%v"]`, config, *watch)
+		}
+		configFile := fmt.Sprintf("preventatives: %v", commandArray)
+		err := ioutil.WriteFile("shakur.config.yml", []byte(configFile), 0644)
 		if err != nil {
 			fmt.Println(err)
 		}
